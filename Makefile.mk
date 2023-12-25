@@ -1,19 +1,8 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -pedantic
+CXXFLAGS = -Wall -Wextra -pedantic -std=c++11
 
-# Настройки сборки
-TARGET = myprogram
-SRCS = main.cpp myclass.cpp
-OBJS = $(SRCS:.cpp=.o)
+calculator: main.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $<
 
-# Правило сборки
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-# Правило компиляции исходных файлов
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
-# Правило очистки
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f calculator
