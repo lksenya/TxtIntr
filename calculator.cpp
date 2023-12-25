@@ -3,7 +3,6 @@
 #include <vector>
 #include <sstream>
 
-// Функция для умножения всех операндов
 double multiplyOperands(const std::vector<double>& operands) {
     double result = 1.0;
     for (double operand : operands) {
@@ -12,7 +11,6 @@ double multiplyOperands(const std::vector<double>& operands) {
     return result;
 }
 
-// Функция для деления первого операнда на остальные
 double divideOperands(const std::vector<double>& operands) {
     if (operands.size() < 2) {
         std::cerr << "Error: Division requires at least two operands." << std::endl;
