@@ -1,46 +1,72 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
 
-using namespace std;
+// Функция для умножения всех операндов
+double multiplyOperands(const std::vector<double>& operands) {
+    double result = 1.0;
+    for (double operand : operands) {
+        result *= operand;
+    }
+    return result;
+}
+
+// Функция для деления первого операнда на остальные
+double divideOperands(const std::vector<double>& operands) {
+    if (operands.size() < 2) {
+        std::cerr << "Error: Division requires at least two operands." << std::endl;
+        return 0.0;
+    }
+    double result = operands[0];
+    for (size_t i = 1; i < operands.size(); ++i) {
+        if (operands[i] != 0) {
+            result /= operands[i];
+        } else {
+            std::cerr << "Error: Division by zero." << std::endl;
+            return 0.0;
+        }
+    }
+    return result;
+}
 
 int main(int argc, char* argv[]) {
-    // Проверяем, что было передано достаточно аргументов
-    if (argc < 3) {
-        cout << "Использование: " << argv[0] << " операция операнд1 операнд2 [операнд3 ...]" << endl;
-        cout << "Поддерживаемые операции: *, /" << endl;
+    if (argc < 4 || argc > 6) {
+        std::cout << "Usage: calculator <operation> <operand1> <operand2> [operand3] [operand4]" << std::endl;
+        std::cout << "Supported operations: multiply, divide" << std::endl;
         return 1;
     }
 
-    // Получаем операцию из первого аргумента
-    string operation = argv[1];
-
-    // Получаем операнды из остальных аргументов
-    vector<double> operands;
-    for (int i = 2; i < argc; i++) {
-        double operand = stod(argv[i]);
+    std::string operation = argv[1];
+    std::vector<double> operands;
+    for (int i = 2; i < argc; ++i) {
+        double operand;
+        std::istringstream iss(argv[i]);
+        if (!(iss >> operand)) {
+            std::cerr << "Error: Invalid operand '" << argv[i] << "'" << std::endl;
+            return 1;
+        }
         operands.push_back(operand);
     }
 
-    // Выполняем операцию
-    double result;
-    if (operation == "*") {
-        result = 1;
-        for (double operand : operands) {
-            result *= operand;
+    if (operation == "multiply") {
+        if (operands.size() < 2 || operands.size() > 4) {
+            std::cerr << "Error: For multiplication, the number of operands should be between 2 and 4." << std::endl;
+            return 1;
         }
-    } else if (operation == "/") {
-        result = operands[0];
-        for (int i = 1; i < operands.size(); i++) {
-            result /= operands[i];
+        double result = multiplyOperands(operands);
+        std::cout << "Result: " << result << std::endl;
+    } else if (operation == "divide") {
+        if (operands.size() < 2 || operands.size() > 4) {
+            std::cerr << "Error: For division, the number of operands should be between 2 and 4." << std::endl;
+            return 1;
         }
+        double result = divideOperands(operands);
+        std::cout << "Result: " << result << std::endl;
     } else {
-        cout << "Неподдерживаемая операция: " << operation << endl;
+        std::cerr << "Error: Unsupported operation '" << operation << "'" << std::endl;
         return 1;
     }
-
-    // Выводим результат
-    cout << "Результат: " << result << endl;
 
     return 0;
 }
